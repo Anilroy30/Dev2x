@@ -1,0 +1,17 @@
+{
+  "name": "dev2x-be",
+  "version": "1.0.0",
+  "description": "Double Your Dev Power",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "JavaScript"
+  ],
+  "author": "Striver",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
