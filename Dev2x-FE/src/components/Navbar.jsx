@@ -1,6 +1,10 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { BASE_URL } from '../utils/constants';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import {Link,  useNavigate } from 'react-router-dom';
+import { removeUser } from '../utils/userSlice';
 
 const Navbar = () => {
     const user = useSelector((store) => store.user);
