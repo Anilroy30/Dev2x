@@ -1,9 +1,19 @@
-// src/App.jsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Body from "./components/Body";
+import Login from "./components/Login";
+
+
 function App() {
   return (
-    <div className="bg-green-400 min-h-screen flex items-center justify-center">
-      <h1 className="text-red-600">Hello World</h1>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Body/>}>
+            <Route path="/login" element={<Login/>}/>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   )
 }
 
