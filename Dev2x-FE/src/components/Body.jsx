@@ -34,11 +34,11 @@ const Body = () => {
 
   
   useEffect(() => {
-    const token = document.cookie.includes("token=");
-    if (!userData && token) {
+    if (!userData) {
       fetchUser();
     }
   }, [userData]);
+
  // Re-run only when `userData` changes
   
 
