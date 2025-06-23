@@ -19,17 +19,15 @@ const Login = () => {
 
   // used cors to pass cross origin in backend
   const handleLogin = async () => {
-
-    try{
+    try {
       const res = await axios.post(BASE_URL + "/login", {
         emailId,
         password,
-      }, {withCredentials: true});
+      }, { withCredentials: true });
 
-      disPatch(addUser(res.data))
-      return navigate("/");
-    }
-    catch(err){
+      disPatch(addUser(res.data));
+      return navigate("/");  // ✅ Redirect to /feed after login
+    } catch (err) {
       setError(err?.response?.data || "something went wrong");
     }
   }
@@ -38,7 +36,9 @@ const Login = () => {
     try{
       const res = await axios.post(BASE_URL + "/signup", {firstName, lastName, emailId, password}, {withCredentials: true});
       disPatch(addUser(res.data.data));
-      return navigate("/profile");
+      if (document.cookie.includes("token=")) {
+        navigate("/profile");
+      }
     }
     catch(err){
       setError(err?.response?.data || "something went wrong");

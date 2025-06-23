@@ -12,15 +12,19 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        try{
-            await axios.post(BASE_URL + "/logout", {}, {withCredentials: true});
+        try {
+            await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
+
+            // ✅ Manually clear cookie
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
             disPatch(removeUser());
-            return navigate("/login");
-        }
-        catch(err){
+            navigate("/login");
+        } 
+        catch (err) {
             console.error(err);
         }
-    }
+    };
 
   return (
     <div className="navbar bg-base-300">

@@ -34,13 +34,12 @@ const Body = () => {
 
   
   useEffect(() => {
-    if (!userData) {
+    const tokenExists = document.cookie.includes("token=");
+    if (!userData && tokenExists) {
       fetchUser();
     }
   }, [userData]);
-
  // Re-run only when `userData` changes
-  
 
   return (
     <div>
