@@ -14,32 +14,27 @@ const Body = () => {
   const userData = useSelector((store) => store.user);
 
   const fetchUser = async () => {
-  if (userData) return;
-  try {
-    const res = await axios.get(BASE_URL + "/profile/view", {
-      withCredentials: true,
-    });
-
-    dispatch(addUser(res.data));
-  } catch (err) {
-    if (err.response && err.response.status === 401) { 
-      // Expected if user is logged out
-      navigate("/login");
-    } else {
-      // Unexpected error
+    if (userData) return;
+    try {
+      const res = await axios.get(BASE_URL + "/profile/view", {
+        withCredentials: true,
+      });
+  
+      dispatch(addUser(res.data));
+    } catch (err) {
+      if (err.response && err.response.status === 401) { 
+        navigate("/login");
+      }
       console.error("Body.js fetchUser error:", err);
     }
-  }
-};
-
+  };
   
   useEffect(() => {
-    const tokenExists = document.cookie.includes("token=");
-    if (!userData && tokenExists) {
+    if (!userData) {
       fetchUser();
     }
-  }, [userData]);
- // Re-run only when `userData` changes
+  }, [userData]); // Re-run only when `userData` changes
+  
 
   return (
     <div>

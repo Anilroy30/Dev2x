@@ -1,98 +1,72 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+const mongoose = require('mongoose');
+const validator = require('validator');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema(
-  {
+const userSchema = mongoose.Schema({
     firstName: {
-      type: String,
-      required: true,
-      minLength: 4,
-      maxLength: 50,
+        type: String,
+        required: true,
+        trim: true,
+        minlength: [4, "First Name must be at least 4 characters long"],
+        maxlength: [20, "First Name cannot exceed 20 characters"],
     },
     lastName: {
-      type: String,
+        type: String,
+        required: true,
+        trim: true,
+        minlength: [4, "Last Name must be at least 4 characters long"],
+        maxlength: [20, "Last Name cannot exceed 20 characters"],
     },
     emailId: {
-      type: String,
-      lowercase: true,
-      required: true,
-      unique: true,
-      trim: true,
-      validate(value) {
-        if (!validator.isEmail(value)) {
-          throw new Error("Invalid email address: " + value);
-        }
-      },
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        validate: {
+            validator: validator.isEmail,
+            message: "Invalid Email Address",
+        },
     },
     password: {
-      type: String,
-      required: true,
-      validate(value) {
-        if (!validator.isStrongPassword(value)) {
-          throw new Error("Enter a Strong Password: " + value);
-        }
-      },
-    },
-    age: {
-      type: Number,
-      min: 18,
-    },
-    gender: {
-      type: String,
-      enum: {
-        values: ["male", "female", "other"],
-        message: `{VALUE} is not a valid gender type`,
-      },
-      // validate(value) {
-      //   if (!["male", "female", "others"].includes(value)) {
-      //     throw new Error("Gender data is not valid");
-      //   }
-      // },
-    },
-    photoUrl: {
-      type: String,
-      default: "https://geographyandyou.com/images/user-profile.png",
-      validate(value) {
-        if (!validator.isURL(value)) {
-          throw new Error("Invalid Photo URL: " + value);
-        }
-      },
+        type: String,
+        required: true,
+        validate: {
+            validator: validator.isStrongPassword,
+            message: "Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character",
+        },
     },
     about: {
-      type: String,
-      default: "This is a default about of the user!",
+        type: String,
+        default: "This is a default about of the user!",
+        lowercase: true,
     },
-    skills: {
-      type: [String],
+    photoUrl: {
+        type: String,
+        default: "https://www.google.com",
+        validate: {
+            validator: validator.isURL,
+            message: "Invalid Photo URL",
+        },
     },
-  },
-  {
-    timestamps: true,
-  }
-);
+}, { timestamps: true });
 
+// JWT Token Generator
 userSchema.methods.getJWT = async function () {
-  const user = this;
-
-  const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
-
-  return token;
+    const user = this;
+    const token = jwt.sign(
+        { _id: user._id },
+        process.env.JWT_SECRET,  // Replace with process.env.JWT_SECRET in production
+        { expiresIn: "7d" }
+    );
+    return token;
 };
 
-userSchema.methods.validatePassword = async function (passwordInputByUser) {
-  const user = this;
-  const passwordHash = user.password;
-
-  const isPasswordValid = await bcrypt.compare(
-    passwordInputByUser,
-    passwordHash
-  );
-
-  return isPasswordValid;
+// Password Validation for Login
+userSchema.methods.validatePassword = async function (passwordInput) {
+    return bcrypt.compare(passwordInput, this.password);
 };
 
-module.exports = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
