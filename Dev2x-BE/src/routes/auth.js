@@ -1,3 +1,4 @@
+const { sendEmail } = require("../utils/mailer"); 
 const express = require("express");
 const authRouter = express.Router();
 
@@ -21,6 +22,18 @@ authRouter.post("/signup", async (req, res) => {
 
         const savedUser = await user.save();
         const token = await savedUser.getJWT();
+
+        await sendEmail({
+          to: savedUser.emailId,
+          subject: "🎉 Welcome to Dev2x!",
+          html: `
+        <h2>Hi ${savedUser.firstName} 👋</h2>
+        <p>Welcome to <strong>Dev2x</strong>, your new developer community home!</p>
+        <p>Connect. Collaborate. Grow. 🚀</p>
+        <hr>
+        <p style="font-size: 12px; color: #999;">If you did not sign up for Dev2x, you can ignore this email.</p>
+    `,
+        });
 
         res.cookie("token", token, { expires: new Date(Date.now() + 8 * 3600000), httpOnly: true });
         res.json({ message: "User added successfully", data: savedUser });
