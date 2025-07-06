@@ -1,21 +1,20 @@
-
 require('dotenv').config();
 const ses = require('./mailer');
 
-async function sendEmail() {
+async function sendEmail({ to, subject, html }) {
   const params = {
     Source: 'Dev2x <support@dev2x.com>',
     Destination: {
-      ToAddresses: ['anilkumarakula34@gmail.com'], // replace with a real email
+      ToAddresses: [to],
     },
     Message: {
       Subject: {
-        Data: 'Welcome to Dev2x!',
+        Data: subject,
         Charset: 'UTF-8',
       },
       Body: {
-        Text: {
-          Data: 'Hello! This is a test email sent using AWS SES SDK.',
+        Html: {
+          Data: html,
           Charset: 'UTF-8',
         },
       },
@@ -27,7 +26,8 @@ async function sendEmail() {
     console.log('✅ Email sent! Message ID:', result.MessageId);
   } catch (err) {
     console.error('❌ Error sending email:', err);
+    throw err;
   }
 }
 
-sendEmail();
+module.exports = sendEmail;

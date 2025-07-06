@@ -1,4 +1,4 @@
-const { sendEmail } = require("../utils/mailer"); 
+const sendEmail = require('../utils/sendTestEmail');
 const express = require("express");
 const authRouter = express.Router();
 
@@ -24,7 +24,7 @@ authRouter.post("/signup", async (req, res) => {
         const token = await savedUser.getJWT();
 
         await sendEmail({
-          to: savedUser.emailId,
+          to: savedUser.emailId?.toString(),
           subject: "🎉 Welcome to Dev2x!",
           html: `
         <h2>Hi ${savedUser.firstName} 👋</h2>
@@ -38,8 +38,9 @@ authRouter.post("/signup", async (req, res) => {
         res.cookie("token", token, { expires: new Date(Date.now() + 8 * 3600000), httpOnly: true });
         res.json({ message: "User added successfully", data: savedUser });
     } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
+    console.error("Signup error:", err);
+    res.status(400).json({ message: err.message });
+}
 });
 
 authRouter.post("/login", async (req, res) => {
