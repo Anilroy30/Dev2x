@@ -15,7 +15,12 @@ const Footer = () => {
         </svg>
         <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
       </aside>
-      <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+      <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end text-sm">
+        <a href="/terms-and-conditions" className="hover:underline">Terms</a>
+        <a href="/privacy-policy" className="hover:underline">Privacy</a>
+        <a href="/refund-policy" className="hover:underline">Refund</a>
+        <a href="/shipping-policy" className="hover:underline">Shipping</a>
+        <a href="/contact-us" className="hover:underline">Contact</a>
         <a>
           <svg
             xmlns="http://www.w3.org/2000/svg"
