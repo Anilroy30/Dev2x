@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
 
+require("./utils/cronjob")
+
 // const jwt = require("jsonwebtoken");
 const corsOptions =  {
     origin: process.env.FRONTEND_URL,
