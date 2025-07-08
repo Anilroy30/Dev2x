@@ -5,10 +5,10 @@ const razorpayInstance = require("../utils/razorpay");
 const Payment = require("../models/payment");
 const User = require("../models/user");
 const { membershipAmount } = require("../utils/constants");
-const {
-  validateWebhookSignature,
-} = require("razorpay/dist/utils/razorpay-utils");
-// const crypto = require("crypto");
+// const {
+//   validateWebhookSignature,
+// } = require("razorpay/dist/utils/razorpay-utils");
+const crypto = require("crypto");
 
 paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   try {
@@ -55,18 +55,18 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     const webhookSignature = req.get("X-Razorpay-Signature");
     console.log("Webhook Signature", webhookSignature);
 
-    const isWebhookValid = validateWebhookSignature(
-      JSON.stringify(req.body),
-      webhookSignature,
-      process.env.RAZORPAY_WEBHOOK_SECRET
-    );
+    // const isWebhookValid = validateWebhookSignature(
+    //   JSON.stringify(req.body),
+    //   webhookSignature,
+    //   process.env.RAZORPAY_WEBHOOK_SECRET
+    // );
 
-    // const expectedSignature = crypto
-    //   .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET)
-    //   .update(JSON.stringify(req.body))
-    //   .digest("hex");
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET)
+      .update(JSON.stringify(req.body))
+      .digest("hex");
 
-    // const isWebhookValid = expectedSignature === webhookSignature;
+    const isWebhookValid = expectedSignature === webhookSignature;
 
     if (!isWebhookValid) {
       console.log("INvalid Webhook Signature");
@@ -99,6 +99,8 @@ paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
   const user = req.user.toJSON();
   console.log(user);
   if (user.isPremium) {
+    console.log(user);
+    console.log(user.isPremium);
     return res.json({ ...user });
   }
   return res.json({ ...user });

@@ -51,7 +51,9 @@ const Premium = () => {
     rzp.open();
   };
   return isUserPremium ? (
-    "You're are already a premium user"
+    <div className="text-center mt-10 text-red-600 text-xl font-bold">
+    🎉 You're already a Premium User!
+  </div>
   ) : (
     <div className="m-10">
       <div className="flex w-full">
@@ -75,7 +77,7 @@ const Premium = () => {
           <h1 className="font-bold text-3xl">Gold Membership</h1>
           <ul>
             <li> - Chat with other people</li>
-            <li> - Inifiniye connection Requests per day</li>
+            <li> - Inifinite connection Requests per day</li>
             <li> - Blue Tick</li>
             <li> - 6 months</li>
           </ul>
