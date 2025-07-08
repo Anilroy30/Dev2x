@@ -1,5 +1,5 @@
 const express = require("express");
-const { userAuth } = require("../middlewares/auth");
+const userAuth = require("../middlewares/auth");
 const paymentRouter = express.Router();
 const razorpayInstance = require("../utils/razorpay");
 const Payment = require("../models/payment");
@@ -8,6 +8,7 @@ const { membershipAmount } = require("../utils/constants");
 const {
   validateWebhookSignature,
 } = require("razorpay/dist/utils/razorpay-utils");
+// const crypto = require("crypto");
 
 paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   try {
@@ -59,6 +60,13 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
       webhookSignature,
       process.env.RAZORPAY_WEBHOOK_SECRET
     );
+
+    // const expectedSignature = crypto
+    //   .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET)
+    //   .update(JSON.stringify(req.body))
+    //   .digest("hex");
+
+    // const isWebhookValid = expectedSignature === webhookSignature;
 
     if (!isWebhookValid) {
       console.log("INvalid Webhook Signature");
