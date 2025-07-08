@@ -49,6 +49,13 @@ const userSchema = mongoose.Schema({
             message: "Invalid Photo URL",
         },
     },
+    isPremium: {
+        type: Boolean,
+        default: false,
+    },
+    membershipType: {
+        type: String,
+    }
 }, { timestamps: true });
 
 // JWT Token Generator
