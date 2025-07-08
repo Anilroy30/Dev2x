@@ -81,15 +81,6 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
 
     await user.save();
 
-    // Update the user as premium
-
-    // if (req.body.event == "payment.captured") {
-    // }
-    // if (req.body.event == "payment.failed") {
-    // }
-
-    // return success response to razorpay
-
     return res.status(200).json({ msg: "Webhook received successfully" });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
