@@ -43,7 +43,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
     const savedPayment = await payment.save();
 
     // Return back my order details to frontend
-    res.json({ ...savedPayment.toJSON(), keyId: process.env.RAZORPAY_LIVE_KEY_ID });
+    res.json({ ...savedPayment.toJSON(), keyId: process.env.RAZORPAY_TEST_KEY_ID });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
   }
